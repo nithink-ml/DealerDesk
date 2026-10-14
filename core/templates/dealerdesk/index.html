@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIKMO DealerDesk — Automotive Parts Operations Platform</title>
+  <meta name="description" content="Industrial B2B dealer operations application for automotive parts distribution, order lifecycle management, automated supplier sync, and demand forecasting.">
+  <link rel="stylesheet" href="/static/css/dashboard.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f172a'/><text x='50' y='68' font-size='56' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='%2338bdf8'>V</text></svg>">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-symbol">V</div>
+        <div class="brand-text">
+          <div class="brand-title">VIKMO DealerDesk</div>
+          <div class="brand-subtitle">Automotive Operations</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Core Workspaces</div>
+        <a class="nav-item active" data-tab="dashboard" href="#overview" onclick="switchTab('dashboard')">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span>Overview</span>
+        </a>
+        <a class="nav-item" data-tab="products" href="#products" onclick="switchTab('products')">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+          <span>Products & Inventory</span>
+        </a>
+        <a class="nav-item" data-tab="orders" href="#orders" onclick="switchTab('orders')">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+          </svg>
+          <span>Orders</span>
+        </a>
+
+        <div class="nav-section-title">Integration & Intelligence</div>
+        <a class="nav-item" data-tab="sync" href="#sync" onclick="switchTab('sync')">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          <span>Supplier Sync</span>
+        </a>
+        <a class="nav-item" data-tab="assistant" href="#assistant" onclick="switchTab('assistant')">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+          </svg>
+          <span>Dealer Assistant</span>
+        </a>
+        <a class="nav-item" data-tab="forecast" href="#forecasting" onclick="switchTab('forecast')">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+          </svg>
+          <span>Forecasting</span>
+        </a>
+
+        <div class="nav-section-title">Reference</div>
+        <a class="nav-item" href="/docs/" target="_blank" rel="noopener">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+          </svg>
+          <span>API Specification</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-status" onclick="checkBackendHealth(true)" style="cursor: pointer;" title="System status • Click to verify connection" role="button" tabindex="0">
+        <div class="status-indicator-box" id="sidebar-status-box">
+          <span class="pulse-dot" id="sidebar-status-dot"></span>
+          <div class="status-meta">
+            <div class="status-title" id="sidebar-status-title">System status</div>
+            <div class="status-desc" id="sidebar-status-desc">Checking services...</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <div class="main-content">
+      <!-- Topbar Header -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <nav class="breadcrumb-trail">
+            <span class="trail-root">Operations</span>
+            <span class="trail-sep">/</span>
+            <span class="trail-current" id="topbar-page-title">Overview</span>
+          </nav>
+        </div>
+        <div class="topbar-right">
+          <div class="health-indicator" id="topbar-health-tag" onclick="checkBackendHealth(true)" style="cursor: pointer;" title="Click to test connection">
+            <span class="pulse-dot" id="topbar-health-dot"></span>
+            <span class="health-label" id="backend-health-text">Checking...</span>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="refreshActiveWorkspace()">
+            <svg style="width: 13px; height: 13px;" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Refresh
+          </button>
+          <button class="btn btn-primary btn-sm" onclick="openCreateOrderModal()">
+            + Create Draft Order
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <main class="content-body">
+        <!-- MODULE A1: BACKEND CORE / OVERVIEW -->
+        <section class="tab-pane active" id="tab-dashboard">
+          <div class="section-heading">
+            <div>
+              <h2 class="view-title">Operational Overview</h2>
+              <p class="view-subtitle">Live dealership metrics, catalogue status, and pending order actions.</p>
+            </div>
+          </div>
+
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-label">Catalogue Products</div>
+              <div class="kpi-value" id="stat-total-products">...</div>
+              <div class="kpi-sub">Across 11 automotive categories</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Active Dealerships</div>
+              <div class="kpi-value" id="stat-total-dealers">...</div>
+              <div class="kpi-sub">Authorised regional distributors</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Total Orders</div>
+              <div class="kpi-value" id="stat-total-orders">...</div>
+              <div class="kpi-sub">Draft, Confirmed & Dispatched</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Safety Stock Alerts</div>
+              <div class="kpi-value" id="stat-reorder-alerts" style="color: #b45309;">...</div>
+              <div class="kpi-sub">SKUs below calculated reorder point</div>
+            </div>
+          </div>
+
+          <div class="split-view">
+            <!-- Left: Recent Orders Table -->
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Recent Dealer Orders</div>
+                <button class="btn btn-secondary btn-sm" onclick="switchTab('orders')">View All Orders</button>
+              </div>
+              <div class="table-responsive">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 140px;">Order Reference</th>
+                      <th>Dealer</th>
+                      <th style="width: 110px;">Status</th>
+                      <th class="cell-right" style="width: 130px;">Total (INR)</th>
+                      <th style="width: 80px; text-align: center;">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboard-recent-orders">
+                    <tr><td colspan="5" style="text-align: center; padding: 24px; color: var(--text-dim);">Loading orders...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right: Stock Reorder Watchlist -->
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Reorder Suggestions Watchlist</div>
+                <button class="btn btn-secondary btn-sm" onclick="switchTab('forecast')">Full Forecast</button>
+              </div>
+              <div style="padding: 12px 18px;" id="dashboard-reorder-alerts">
+                <div style="padding: 20px; color: var(--text-dim); text-align: center;">Evaluating reorder points...</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom: System Diagnostics -->
+          <div class="panel" style="margin-top: 20px;">
+            <div class="panel-header">
+              <div class="panel-title">System & Interface Contracts</div>
+            </div>
+            <div style="padding: 16px 18px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; font-size: 12px;">
+              <div>
+                <div style="font-weight: 600; color: var(--text-muted); text-transform: uppercase; font-size: 10px; margin-bottom: 4px;">State Machine</div>
+                <div style="color: var(--text-main);">DRAFT → CONFIRMED → DISPATCHED → DELIVERED (or CANCELLED)</div>
+              </div>
+              <div>
+                <div style="font-weight: 600; color: var(--text-muted); text-transform: uppercase; font-size: 10px; margin-bottom: 4px;">Idempotency Engine</div>
+                <div style="color: var(--text-main);">Concurrent safe via SHA-256 and Database Row Locks</div>
+              </div>
+              <div>
+                <div style="font-weight: 600; color: var(--text-muted); text-transform: uppercase; font-size: 10px; margin-bottom: 4px;">Supplier Sync Feed</div>
+                <div style="color: var(--text-main);">Cursor pagination, rate backoff & catalog stock isolation</div>
+              </div>
+              <div>
+                <div style="font-weight: 600; color: var(--text-muted); text-transform: uppercase; font-size: 10px; margin-bottom: 4px;">Demand Forecasting</div>
+                <div style="color: var(--text-main);">26-week rolling validation • WAPE 0.362 • 40 SKUs</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MODULE E: PRODUCTS & INVENTORY -->
+        <section class="tab-pane" id="tab-products">
+          <div class="section-heading">
+            <div>
+              <h2 class="view-title">Products & Inventory</h2>
+              <p class="view-subtitle">Live dealership stock balances, vehicle compatibility fitments, and unit price schedules.</p>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="toolbar">
+              <div style="display: flex; gap: 10px; flex: 1; align-items: center;">
+                <input type="text" id="products-search-input" class="search-input" placeholder="Search by SKU, part name, or brand...">
+                <select id="products-category-select" class="select-input">
+                  <option value="">All Categories</option>
+                  <option value="Brakes">Brakes</option>
+                  <option value="Filters">Filters</option>
+                  <option value="Transmission">Transmission</option>
+                  <option value="Electrical">Electrical</option>
+                  <option value="Engine">Engine</option>
+                  <option value="Suspension">Suspension</option>
+                  <option value="Tyres">Tyres</option>
+                  <option value="Lubricants">Lubricants</option>
+                  <option value="Accessories">Accessories</option>
+                </select>
+              </div>
+              <div style="font-size: 12px; color: var(--text-dim);" id="products-quick-count"></div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width: 120px;">SKU</th>
+                    <th>Product Name & Vehicle Fitment</th>
+                    <th style="width: 120px;">Category</th>
+                    <th style="width: 110px;">Brand</th>
+                    <th class="cell-right" style="width: 120px;">Unit Price</th>
+                    <th style="width: 110px;">Available Stock</th>
+                    <th style="width: 160px; text-align: right;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="products-table-body">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="pagination-bar">
+              <div id="products-page-info">Showing products...</div>
+              <div class="page-buttons">
+                <button class="btn btn-secondary btn-sm" id="products-prev-btn" onclick="loadProducts(state.productsPage - 1)">Previous</button>
+                <button class="btn btn-secondary btn-sm" id="products-next-btn" onclick="loadProducts(state.productsPage + 1)">Next</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MODULE A2: ORDERS ENGINE -->
+        <section class="tab-pane" id="tab-orders">
+          <div class="section-heading">
+            <div>
+              <h2 class="view-title">Dealer Orders Management</h2>
+              <p class="view-subtitle">Order lifecycle workflows, GST calculations, and stock reservation enforcement.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="openCreateOrderModal()">+ Create Draft Order</button>
+          </div>
+
+          <div class="panel">
+            <div class="toolbar">
+              <div style="display: flex; gap: 10px; align-items: center; flex: 1;">
+                <label style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Status Filter:</label>
+                <select id="orders-status-select" class="select-input">
+                  <option value="">All Orders</option>
+                  <option value="DRAFT">DRAFT</option>
+                  <option value="CONFIRMED">CONFIRMED</option>
+                  <option value="DISPATCHED">DISPATCHED</option>
+                  <option value="DELIVERED">DELIVERED</option>
+                  <option value="CANCELLED">CANCELLED</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width: 160px;">Order Number</th>
+                    <th>Dealer Account</th>
+                    <th style="width: 110px;">Status</th>
+                    <th style="width: 90px; text-align: center;">Lines</th>
+                    <th class="cell-right" style="width: 130px;">Grand Total</th>
+                    <th style="width: 160px;">Created Date</th>
+                    <th style="width: 100px; text-align: right;">Manage</th>
+                  </tr>
+                </thead>
+                <tbody id="orders-table-body">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="pagination-bar">
+              <div id="orders-page-info">Showing orders...</div>
+              <div class="page-buttons">
+                <button class="btn btn-secondary btn-sm" id="orders-prev-btn" onclick="loadOrders(state.ordersPage - 1)">Previous</button>
+                <button class="btn btn-secondary btn-sm" id="orders-next-btn" onclick="loadOrders(state.ordersPage + 1)">Next</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MODULE B: SUPPLIER SYNC -->
+        <section class="tab-pane" id="tab-sync">
+          <div class="section-heading">
+            <div>
+              <h2 class="view-title">Supplier Feed Synchronisation</h2>
+              <p class="view-subtitle">Upstream catalog synchronization via cursor-based HTTP pagination with rate limit resilience.</p>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-bottom: 24px;">
+            <div class="panel-header">
+              <div class="panel-title">Ingestion Controller</div>
+              <div>
+                <button class="btn btn-primary" id="sync-trigger-btn" onclick="triggerSupplierSync()">
+                  Trigger Catalogue Sync
+                </button>
+              </div>
+            </div>
+            <div style="padding: 16px 18px;">
+              <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px; line-height: 1.5;">
+                Ingests supplier items from <code>http://127.0.0.1:8099/v1/products</code> using opaque cursors. The worker handles HTTP 429 backoff retries, reconciles conflicting records via timestamp comparison, and guarantees dealership inventory isolation.
+              </p>
+
+              <div id="sync-progress-box" style="display: none; padding: 12px 16px; background-color: var(--surface-muted); border: 1px solid var(--border-default); border-radius: var(--radius-xs); margin-bottom: 16px;">
+                <div id="sync-status-msg" style="font-size: 12px; color: var(--primary-accent); display: flex; align-items: center; gap: 8px;">
+                  <span class="pulse-dot"></span> Ingestion in progress...
+                </div>
+              </div>
+
+              <div id="sync-results-card" style="display: none;">
+                <div class="kpi-grid" style="margin-bottom: 20px;">
+                  <div class="kpi-card">
+                    <div class="kpi-label">Created SKUs</div>
+                    <div class="kpi-value" id="sync-result-created" style="color: #16a34a;">0</div>
+                    <div class="kpi-sub">New parts added to catalog</div>
+                  </div>
+                  <div class="kpi-card">
+                    <div class="kpi-label">Updated SKUs</div>
+                    <div class="kpi-value" id="sync-result-updated" style="color: #2563eb;">0</div>
+                    <div class="kpi-sub">Prices and specifications refreshed</div>
+                  </div>
+                  <div class="kpi-card">
+                    <div class="kpi-label">Unchanged SKUs</div>
+                    <div class="kpi-value" id="sync-result-unchanged">0</div>
+                    <div class="kpi-sub">Identical timestamp records skipped</div>
+                  </div>
+                  <div class="kpi-card">
+                    <div class="kpi-label">Rejected Records</div>
+                    <div class="kpi-value" id="sync-result-rejected-count" style="color: #dc2626;">0</div>
+                    <div class="kpi-sub">Malformed price or invalid SKU payload</div>
+                  </div>
+                </div>
+
+                <div style="display: flex; gap: 24px; font-size: 12px; color: var(--text-muted); margin-bottom: 16px; padding: 10px 14px; background-color: var(--surface-muted); border-radius: var(--radius-xs);">
+                  <div>Feed Pages Ingested: <strong id="sync-result-pages" style="color: var(--text-main);">0</strong></div>
+                  <div>HTTP Requests Executed: <strong id="sync-result-requests" style="color: var(--text-main);">0</strong></div>
+                  <div>Sync Protocol: <strong style="color: var(--text-main);">Cursor Pagination with Exponential Backoff</strong></div>
+                </div>
+
+                <div class="panel-header" style="border-top: 1px solid var(--border-default); padding-left: 0; padding-right: 0;">
+                  <div class="panel-title">Rejected Supplier Items</div>
+                </div>
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th style="width: 180px;">Supplier SKU</th>
+                        <th>Rejection Reason</th>
+                      </tr>
+                    </thead>
+                    <tbody id="sync-rejected-table-body">
+                      <!-- Populated by JS -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MODULE C: DEALER ASSISTANT (GenAI) -->
+        <section class="tab-pane" id="tab-assistant">
+          <div class="section-heading">
+            <div>
+              <h2 class="view-title">Dealer Operations Assistant</h2>
+              <p class="view-subtitle">Conversational operations workspace grounded with live database catalog tools.</p>
+            </div>
+          </div>
+
+          <div class="chat-workspace">
+            <div class="chat-header">
+              <div class="chat-context">
+                <div style="font-weight: 600; font-size: 13px; color: var(--text-main);">Dealer Operations Workspace</div>
+                <span class="status-pill confirmed" style="font-size: 9px;">Tool Grounding Active</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <label style="font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">Acting Dealer:</label>
+                <select id="assistant-dealer-select" class="select-input" style="padding: 4px 8px; font-size: 12px;">
+                  <!-- Populated by JS -->
+                </select>
+                <button class="btn btn-secondary btn-sm" onclick="clearAssistantChat()">Reset Session</button>
+              </div>
+            </div>
+
+            <div class="chat-stream" id="chat-history">
+              <div class="chat-message assistant">
+                <div class="chat-bubble">
+                  Welcome to the DealerDesk Operations Assistant. I can search vehicle parts and compatibility, check live inventory balances across SKUs, or generate draft dealer purchase orders directly into the database.
+                </div>
+              </div>
+            </div>
+
+            <div style="padding: 8px 18px; background-color: var(--surface-base); border-top: 1px solid var(--border-default);">
+              <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">Suggested operational queries:</div>
+              <div class="quick-prompts">
+                <button class="prompt-btn" onclick="useQuickPrompt('Do you have front brake pads for Bajaj Pulsar 150?')">Brake Pads for Pulsar 150</button>
+                <button class="prompt-btn" onclick="useQuickPrompt('Which SKUs currently have stock less than 15 units?')">Low Stock SKUs</button>
+                <button class="prompt-btn" onclick="useQuickPrompt('What orders are currently in DRAFT status?')">Draft Orders List</button>
+                <button class="prompt-btn" onclick="useQuickPrompt('Check inventory and price for spark plugs')">Spark Plug Inventory</button>
+              </div>
+            </div>
+
+            <div class="chat-footer">
+              <input type="text" id="assistant-chat-input" class="chat-input" placeholder="Type an operational query (e.g. 'Check stock for BRK-1044' or 'Create draft order for 5 brake pads')...">
+              <button class="btn btn-primary" onclick="sendAssistantMessage()">Send</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- MODULE D: DEMAND FORECASTING & REORDER -->
+        <section class="tab-pane" id="tab-forecast">
+          <div class="section-heading">
+            <div>
+              <h2 class="view-title">Demand Forecasting & Reorder Engine</h2>
+              <p class="view-subtitle">Rolling-origin ML forecast curves, lead time demand, and safety stock calculations across 40 SKUs.</p>
+            </div>
+          </div>
+
+          <div class="split-view" style="margin-bottom: 24px;">
+            <!-- Left: Interactive Chart -->
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title" id="forecast-chart-sku-title">Demand Curve (Next 4 Weeks)</div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <label style="font-size: 11px; color: var(--text-muted); font-weight: 600;">SKU:</label>
+                  <select id="forecast-sku-select" class="select-input" style="padding: 4px 8px; font-size: 12px;">
+                    <!-- Populated by JS -->
+                  </select>
+                </div>
+              </div>
+              <div style="padding: 16px;">
+                <div id="forecast-chart-box" class="chart-container">
+                  <div style="color: var(--text-dim); font-size: 12px;">Loading forecast curve...</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Methodology Card -->
+            <div class="panel">
+              <div class="panel-header">
+                <div class="panel-title">Forecasting Methodology & Validation</div>
+              </div>
+              <div style="padding: 16px 18px; font-size: 12px; color: var(--text-muted); line-height: 1.6;">
+                <p style="margin-bottom: 12px;">
+                  Trained on 26-week rolling-origin validation windows without data leakage. The model selection algorithm achieves an aggregate Weighted Absolute Percentage Error (WAPE) of <strong>0.362</strong>, outperforming naive 13-week moving average (0.396) and last-value baseline (0.535).
+                </p>
+                <div style="background-color: var(--surface-muted); border: 1px solid var(--border-default); border-radius: var(--radius-xs); padding: 12px; font-family: var(--font-mono); font-size: 11px; color: #1e293b;">
+                  <div>Safety Stock = ceil(1.65 × σ × √LeadTime)</div>
+                  <div style="margin-top: 4px;">Reorder Point = Lead Time Demand + Safety Stock</div>
+                  <div style="margin-top: 4px;">Reorder Qty = max(0, ceil(Reorder Point - Live Stock))</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bottom: Full Reorder Table -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Reorder Recommendations (40 Catalogue SKUs)</div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width: 120px;">SKU</th>
+                    <th style="width: 100px;">Current Stock</th>
+                    <th style="width: 100px;">Lead Time</th>
+                    <th style="width: 100px;">LT Demand</th>
+                    <th style="width: 100px;">Safety Stock</th>
+                    <th style="width: 110px;">Reorder Point</th>
+                    <th style="width: 110px;">Suggested Qty</th>
+                    <th style="width: 120px; text-align: right;">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="reorder-table-body">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL: ADJUST INVENTORY -->
+  <div class="modal-overlay" id="modal-stock">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Adjust Live Stock Level</h3>
+        <button class="modal-close" onclick="closeModal('modal-stock')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Product SKU</label>
+          <input type="text" id="stock-modal-sku" class="form-control" readonly style="background-color: var(--surface-muted);">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Available Physical Quantity</label>
+          <input type="number" id="stock-modal-qty" class="form-control" min="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Reason for Stock Adjustment</label>
+          <input type="text" id="stock-modal-reason" class="form-control" value="Physical warehouse stock audit">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-stock')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveInventoryUpdate()">Update Inventory</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PRODUCT DETAIL -->
+  <div class="modal-overlay" id="modal-product-detail">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="product-detail-name">Product Specification</h3>
+        <button class="modal-close" onclick="closeModal('modal-product-detail')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+          <div>
+            <span class="form-label">SKU Identifier</span>
+            <span class="sku-tag" id="product-detail-sku"></span>
+          </div>
+          <div>
+            <span class="form-label">Unit Price</span>
+            <span class="price-val" id="product-detail-price" style="font-size: 15px;"></span>
+          </div>
+          <div>
+            <span class="form-label">Category</span>
+            <span id="product-detail-cat" style="font-size: 13px; color: var(--text-main);"></span>
+          </div>
+          <div>
+            <span class="form-label">Manufacturer Brand</span>
+            <span id="product-detail-brand" style="font-size: 13px; color: var(--text-main);"></span>
+          </div>
+          <div>
+            <span class="form-label">Vehicle Fitment</span>
+            <span id="product-detail-fit" style="font-size: 13px; color: var(--text-main);"></span>
+          </div>
+          <div>
+            <span class="form-label">Dealership Inventory</span>
+            <span id="product-detail-stock" style="font-size: 13px; font-weight: 700; color: #16a34a;"></span>
+          </div>
+        </div>
+        <div>
+          <span class="form-label">Supplier Catalog Description</span>
+          <div id="product-detail-desc" style="padding: 10px 12px; background-color: var(--surface-muted); border: 1px solid var(--border-default); border-radius: var(--radius-xs); font-size: 12px; color: var(--text-muted); line-height: 1.5;"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-product-detail')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ORDER DETAILS & LIFECYCLE ACTIONS -->
+  <div class="modal-overlay" id="modal-order-detail">
+    <div class="modal-dialog" style="max-width: 680px;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Order Ref: <span id="order-detail-num" class="sku-tag"></span></h3>
+          <div style="font-size: 11px; color: var(--text-dim); margin-top: 2px;" id="order-detail-dealer"></div>
+        </div>
+        <div id="order-detail-status"></div>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive" style="margin-bottom: 16px;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width: 100px;">SKU</th>
+                <th>Part Description</th>
+                <th style="width: 50px; text-align: center;">Qty</th>
+                <th class="cell-right" style="width: 90px;">Unit Price</th>
+                <th class="cell-right" style="width: 80px;">GST (18%)</th>
+                <th class="cell-right" style="width: 100px;">Line Total</th>
+              </tr>
+            </thead>
+            <tbody id="order-detail-lines">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 8px;">
+          <div style="width: 240px; font-size: 12px;">
+            <div style="display: flex; justify-content: space-between; padding: 3px 0; color: var(--text-muted);">
+              <span>Subtotal:</span>
+              <span id="order-detail-subtotal" class="price-val"></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 3px 0; color: var(--text-muted);">
+              <span>GST Total (18%):</span>
+              <span id="order-detail-tax" class="price-val"></span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 6px 0; border-top: 1px solid var(--border-default); font-weight: 700; font-size: 14px; color: var(--text-main);">
+              <span>Grand Total:</span>
+              <span id="order-detail-grand" class="price-val"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content: space-between;">
+        <button class="btn btn-secondary" onclick="closeModal('modal-order-detail')">Close</button>
+        <div id="order-detail-actions" style="display: flex; gap: 8px;">
+          <!-- Action buttons populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: CREATE ORDER DRAFT -->
+  <div class="modal-overlay" id="modal-create-order">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Create New Draft Order</h3>
+        <button class="modal-close" onclick="closeModal('modal-create-order')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Select Dealer Account</label>
+          <select id="create-order-dealer-select" class="form-control">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="form-label" style="margin: 0;">Order Line Items</label>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="addDraftItemRow()">+ Add SKU Line</button>
+          </div>
+          <div id="create-order-items-container">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-create-order')">Cancel</button>
+        <button class="btn btn-primary" onclick="submitCreateOrder()">Create Draft Order</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Hub -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Application Logic -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

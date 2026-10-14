@@ -1,0 +1,55 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: vikmo_postgres
+    environment:
+      POSTGRES_DB: dealerdesk
+      POSTGRES_USER: vikmo
+      POSTGRES_PASSWORD: vikmo_dev_password
+    ports:
+      - "5434:5432"
+    volumes:
+      - vikmo_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vikmo -d dealerdesk"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  supplier_mock:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vikmo_supplier_mock
+    command: python supplier_mock/mock_supplier.py --calm --port 8099
+    ports:
+      - "8099:8099"
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vikmo_web
+    command: sh -c "python manage.py migrate --noinput && python manage.py seed_data && python manage.py runserver 0.0.0.0:8000 --noreload"
+    environment:
+      DATABASE_URL: postgres://vikmo:vikmo_dev_password@db:5432/dealerdesk
+      SUPPLIER_API_URL: http://supplier_mock:8099
+      SUPPLIER_API_KEY: dev-supplier-key
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-dev-docker-secret-key}
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      supplier_mock:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  vikmo_pgdata:

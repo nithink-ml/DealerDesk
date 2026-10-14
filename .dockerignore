@@ -1,0 +1,13 @@
+.git
+.gitignore
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+*.log
+.tempmediaStorage
+.user_uploaded
+browser
+*.webp
