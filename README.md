@@ -8,6 +8,7 @@
 [![Database](https://img.shields.io/badge/Database-PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](docker-compose.yml)
 [![GenAI](https://img.shields.io/badge/GenAI-Groq%20%7C%20Gemini%20%7C%20OpenAI-F55036?style=for-the-badge)](core/assistant_views.py)
 [![WAPE](https://img.shields.io/badge/Forecast%20WAPE-0.362-blueviolet?style=for-the-badge)](ml/forecast.csv)
+[![Video Walkthrough](https://img.shields.io/badge/Video-Walkthrough%20(Google%20Drive)-FF0000?style=for-the-badge&logo=google-drive&logoColor=white)](https://drive.google.com/file/d/1Ib_PSeJ05_H7Pj3D16qpQ5xGPTT15Cv3/view?usp=drive_link)
 
 **Track:** Full Platform Submission (Both Django Intern Track & AI / ML Intern Track + Frontend Module E fully completed)  
 **Primary Track:** AI / ML Intern Track (with 100% completion of Django Track A1, A2, B and Frontend E)  
@@ -164,4 +165,4 @@ python smoke_test.py --base-url http://localhost:8000 --all
 
 > **Submission Requirement (§12)**: Up to 5 minutes in your own voice walking through your code (no slides: open your code and walk through the order-confirm flow and/or assistant tool-calling loop).
 > 
-> **Video Link**: `[INSERT UNLISTED YOUTUBE / LOOM / GOOGLE DRIVE LINK HERE BEFORE SUBMISSION]`
+> **Video Link**: [https://drive.google.com/file/d/1Ib_PSeJ05_H7Pj3D16qpQ5xGPTT15Cv3/view?usp=drive_link](https://drive.google.com/file/d/1Ib_PSeJ05_H7Pj3D16qpQ5xGPTT15Cv3/view?usp=drive_link)

@@ -1,5 +1,8 @@
 # DECISIONS.md — VIKMO DealerDesk Technical Decisions
 
+**Video Walkthrough Link:** [https://drive.google.com/file/d/1Ib_PSeJ05_H7Pj3D16qpQ5xGPTT15Cv3/view?usp=drive_link](https://drive.google.com/file/d/1Ib_PSeJ05_H7Pj3D16qpQ5xGPTT15Cv3/view?usp=drive_link)  
+**Track Completed:** Both Django Intern Track & AI / ML Intern Track + Frontend Module E  
+
 This document contains precise, code-cited answers to the evaluation questions for both the **Django Track** and the **AI / ML Track**, plus architectural notes for the **Frontend (Module E)**.
 
 ---
